@@ -5,11 +5,16 @@ const bodyParser = require("body-parser");
 const AWS = require("aws-sdk");
 const {v4: uuid4} = require("uuid");
 
+
+var medicService = require('./routes/medic');
 var dynamodb=new AWS.DynamoDB.DocumentClient({region: 'us-east-2'});
 
 var jsonParser = bodyParser.json();
 const app = express();
 app.use(cors());
+
+
+app.use('/medic', medicService);
 
 app.get("/", function(req, res){
         res.send({"stage": "dev"})
