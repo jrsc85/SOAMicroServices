@@ -47,7 +47,7 @@ app.post("/createPacient", jsonParser, function(req, res){
     (async () => {
         try{
             let data = {
-                "pk": "Patient",
+                "pk": "P-Patient",
                 "sk": "Patient-" + id,
                 "nombres": req.body.nombres,
                 "apellido_P": req.body.apellido_P,
@@ -94,7 +94,7 @@ app.get("/getPacient/:sk", function(req, res){
                 TableName: "medic_schedule_a",
                 KeyConditionExpression: "pk = :pk AND sk = :sk",
                 ExpressionAttributeValues: {
-                    ":pk": "Patient",
+                    ":pk": "P-Patient",
                     ":sk":req.params.sk
                 }
             };
@@ -122,7 +122,7 @@ app.put("/updatePatient/:sk", jsonParser, function(req, res){
          //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Patient",
+            "pk": "P-Patient",
             "sk": req.params.sk
         },
         UpdateExpression: "set nombres = :n,"+
@@ -166,7 +166,7 @@ app.delete("/deletePatient/:sk", function(req, res){
         //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Patient",
+            "pk": "P-Patient",
             "sk": req.params.sk
         }
     };
@@ -190,7 +190,7 @@ app.post("/createDoctor", jsonParser, function(req, res){
     (async () => {
         try{
             let data = {
-                "pk": "Doctor",
+                "pk": "D-Doctor",
                 "sk": "Doctor-" + id,
                 "nombres": req.body.nombres,
                 "apellido_P": req.body.apellido_P,
@@ -236,7 +236,7 @@ app.get("/getDoctor/:sk", function(req, res){
                 TableName: "medic_schedule_a",
                 KeyConditionExpression: "pk = :pk AND sk = :sk",
                 ExpressionAttributeValues: {
-                    ":pk": "Doctor",
+                    ":pk": "D-Doctor",
                     ":sk": req.params.sk
                 }
             };
@@ -262,7 +262,7 @@ app.put("/update/DoctorData/:sk", jsonParser, function(req, res){
          //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Doctor",
+            "pk": "D-Doctor",
             "sk": req.params.sk
         },
         UpdateExpression: "set nombres = :n,"+
@@ -303,7 +303,7 @@ app.delete("/deleteDoctor/:sk", function(req, res){
         //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Doctor",
+            "pk": "D-Doctor",
             "sk": req.params.sk
         }
     };
