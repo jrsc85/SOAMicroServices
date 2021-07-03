@@ -707,7 +707,7 @@ app.put("/update/ScheduleStatus/:sk", jsonParser, function(req, res){
 /******************************************************************************* */
 //------------------------------DATOS MÉDICOS-----------------------------------
 
-//Crear expediente (datos médicos)
+//Crear expediente (datos médicos)--- Se debe validar el hecho de que por cada usuario solo tenga un expediente
 app.post("/pacient/proceedings", jsonParser, function(req, res){
     let id =  uuid4();
     let date = new Date().toLocaleString('es-MX', {timeZone: 'America/Mexico_City'});
@@ -717,8 +717,10 @@ app.post("/pacient/proceedings", jsonParser, function(req, res){
             let data = {
                 "pk": "P-Proceedings",
                 "sk": "Proceeding-" + id,
-                "paciente": req.body.nombres,
-                "doctor": req.body.apellido_P,
+                "paciente": req.body.paciente,
+                "peso": req.body.peso,
+                "altura": req.body.altura,
+                "doctor": req.body.doctor,
                 "createdAt": date,
                 "changedAt": date
             };
@@ -746,16 +748,16 @@ app.post("/pacient/proceedings", jsonParser, function(req, res){
 });
 
 //Obtener datos del paciente por medio de su SK
-app.get("/getPacient/:sk", function(req, res){
+app.get("/getPacient/proceeding/:skProceeding", function(req, res){
     (async ()=> {
         try{
             var params = {
                  //Nombre de la tabla a la que hará referencia
                 TableName: "medic_schedule_a",
-                KeyConditionExpression: "pk = :pk AND sk = :sk",
+                KeyConditionExpression: "pk = :pk AND sk = :skProceeding",
                 ExpressionAttributeValues: {
-                    ":pk": "Patient",
-                    ":sk":req.params.sk
+                    ":pk": "P-Proceedings",
+                    ":skProceeding":req.params.skProceeding
                 }
             };
 
@@ -775,36 +777,24 @@ app.get("/getPacient/:sk", function(req, res){
 });
 
 //Actualizar datos del paciente, menos su contraseña
-app.put("/updatePatient/:sk", jsonParser, function(req, res){
+app.put("/updatePatient/proceeding/:skProceeding", jsonParser, function(req, res){
     let date = new Date().toLocaleString('es-MX', {timeZone: 'America/Mexico_City'});
 
     var params = {
          //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Patient",
-            "sk": req.params.sk
+            "pk": "P-Proceedings",
+            "sk": req.params.skProceeding
         },
-        UpdateExpression: "set nombres = :n,"+
-            "apellido_P = :apP," + 
-            "apellido_M = :apM," + 
-            "genero = :g," +
-            "fechaNacimiento = :fn," + 
-            "estado = :est," +
-            "ciudad = :c," +
-            "telefono = :tel," +
-            "email = :e," +
+        UpdateExpression: "set peso = :p,"+
+            "altura = :a," +
+            "doctor = :d,"+
             "changedAt = :chang",
         ExpressionAttributeValues: {
-            ":n": req.body.nombres,
-            ":apP": req.body.apellido_P,
-            ":apM": req.body.apellido_M,
-            ":e": req.body.email,
-            ":tel": req.body.telefono,
-            ":g": req.body.genero,
-            ":fn": req.body.fechaNacimiento,
-            ":est": req.body.estado,
-            ":c": req.body.ciudad,
+            ":p": req.body.peso,
+            ":a": req.body.altura,
+            ":d": req.body.doctor,
             ":chang": date
         },
         ReturnValues: "UPDATED_NEW"
@@ -820,6 +810,26 @@ app.put("/updatePatient/:sk", jsonParser, function(req, res){
     });
 });
 
+//Borrar expediente, esto solo debe hacerse a la hora de borrar un paciente
+app.delete("/deletePatient/proceeding/:skProceeding", function(req, res){
+    var params = {
+        //Nombre de la tabla a la que hará referencia
+        TableName: "medic_schedule_a", 
+        Key: {
+            "pk": "P-Proceedings",
+            "sk": req.params.skProceeding
+        }
+    };
+
+    dynamodb.delete(params, function(err, response){
+        if(err){
+            res.status(500).send(err);
+        }else{
+            res.status(200).send("Deleted");
+        }
+    });
+});
+/****************************************************************************************/
 
 
 var server = app.listen(4000, function(){
