@@ -471,7 +471,7 @@ app.put("/update/ScheduleDate/:sk", jsonParser, function(req, res){
          //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Doctor",
+            "pk": "S-Schedule",
             "sk": req.params.sk
         },
         UpdateExpression: "set fecha = :f,"+
@@ -495,13 +495,13 @@ app.put("/update/ScheduleDate/:sk", jsonParser, function(req, res){
 });
 
 //Cancelar cita (Esto se puede usar para cambiar el estado de la cita a otros estados, como ASISTIDO, OLVIDADO, etc)
-app.put("/update/ScheduleDate/:sk", jsonParser, function(req, res){
+app.put("/update/ScheduleStatus/:sk", jsonParser, function(req, res){
     let date = new Date().toLocaleString('es-MX', {timeZone: 'America/Mexico_City'});
     var params = {
          //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
         Key: {
-            "pk": "Doctor",
+            "pk": "S-Schedule",
             "sk": req.params.sk
         },
         UpdateExpression: "set estadoConsulta = :eC," + 
