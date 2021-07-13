@@ -7,8 +7,8 @@ const bodyParser = require("body-parser");
 
 
 /* GET home page. */
-router.use('/',  function(req, res, next) {
-    res.render('index', { title: 'Express'})
-  });
+router.get('/', (req, res) => {
+    res.render("index")
+  })
 
  module.exports = router;
