@@ -11,8 +11,14 @@ var jsonParser = bodyParser.json();
 /**************************************************/
 //---------------------MEDICO-----------------------
 
+router.get("/", function(req, res){
+        res.send({"stage": "dev"})
+})
+
+
+
 //Crear nuevo doctor
-app.post("/createDoctor", jsonParser, function(req, res){
+router.post("/createDoctor", jsonParser, function(req, res){
     let id =  uuid4();
     let date = new Date().toLocaleString('es-MX', {timeZone: 'America/Mexico_City'});
 
@@ -57,7 +63,7 @@ app.post("/createDoctor", jsonParser, function(req, res){
 });
 
 //Obtener datos del dotor por medio de su sk
-app.get("/medicInfo/:sk", function(req, res){
+router.get("/medicInfo/:sk", function(req, res){
     (async ()=> {
         try{
             var params = {
@@ -91,7 +97,7 @@ app.get("/medicInfo/:sk", function(req, res){
 });
 
 //Actualizar datos
-app.put("/update/DoctorData/:sk", jsonParser, function(req, res){
+router.put("/update/DoctorData/:sk", jsonParser, function(req, res){
     var params = {
          //Nombre de la tabla a la que hará referencia
         TableName: "school_a", 
@@ -131,7 +137,7 @@ app.put("/update/DoctorData/:sk", jsonParser, function(req, res){
 });
 
 //Borrar cuenta
-app.delete("/deleteDoctor/:sk", function(req, res){
+router.delete("/deleteDoctor/:sk", function(req, res){
     var params = {
         //Nombre de la tabla a la que hará referencia
         TableName: "medic_schedule_a", 
@@ -149,7 +155,5 @@ app.delete("/deleteDoctor/:sk", function(req, res){
         }
     });
 });
-
-/******************************************************/
 
 module.exports = router;
